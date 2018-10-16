@@ -32,9 +32,9 @@ public:
     AruCoProcessing()
         : it_(nh_){
         //load parameters
-        if(!nh_.getParam("marker_dictionary",dictionary_name_))
+        if(!nh_.getParam("/aruco_node/marker_dictonary",dictionary_name_))
             dictionary_name_ = "ARUCO_MIP_36h12";
-        if(!nh_.getParam("marker_size",marker_size_meters_))
+        if(!nh_.getParam("/aruco_node/marker_size",marker_size_meters_))
             marker_size_meters_ = 0.053;
 
         //set local parameters
@@ -43,8 +43,7 @@ public:
         cam_sub_ = it_.subscribeCamera("/image",1,
         &AruCoProcessing::imageCb, this);
         markers_pub_ = nh_.advertise<lab_ros_aruco::DetectedMarkers>("markers",1);
-
-
+        ROS_INFO("Starting Aruco Detection library with marker type: %s", dictionary_name_.c_str());
     }
 
     aruco::CameraParameters _convertCameraInfo(const sensor_msgs::CameraInfoConstPtr& cam_info){
@@ -87,6 +86,7 @@ public:
 
     void imageCb(const sensor_msgs::ImageConstPtr& msg, const sensor_msgs::CameraInfoConstPtr& cam_info){
         //std::cout << "image callback";
+        ROS_DEBUG("Hello1");
         cv_bridge::CvImagePtr cv_ptr;
         try
         {
@@ -97,9 +97,11 @@ public:
           ROS_ERROR("cv_bridge exception: %s", e.what());
           return;
         }
+        ROS_DEBUG("Hello2");        
         auto image_raw = cv_ptr->image;
         auto cam_parameter = _convertCameraInfo(cam_info);
         auto markers = detector_.detect(image_raw);
+        ROS_DEBUG("Found %d tags",markers.size());
         if(markers.size() > 0){
             lab_ros_aruco::DetectedMarkers detected_markers_msgs;            
             for (auto &marker : markers){
@@ -126,11 +128,18 @@ public:
 
 // main() is where program execution begins.
 int main(int argc, char** argv ) {
-   
+
     ros::init(argc, argv,"aruco_process_node");
-    AruCoProcessing pc;
-    ros::spin();
-    return 0;
+    try{
+        AruCoProcessing pc;
+        ROS_DEBUG("Spinning");
+        ros::spin();
+    }
+    catch (const std::exception& e)
+    {
+        ROS_ERROR("exception: %s", e.what());
+        return 0;
+    }
    
     //cout << "Hello World"; // prints Hello World
    //return 0;

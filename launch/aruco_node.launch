@@ -2,7 +2,7 @@
 
   <include file="$(find kinect2_bridge)/launch/kinect2_bridge.launch" />
 
-  <node pkg="lab_ros_aruco" type="lab_ros_aruco_node" name="AruCoMakerNode" output="screen">
+  <node pkg="lab_ros_aruco" type="lab_ros_aruco_node" name="aruco_node" output="screen">
    
     <param name="marker_dictonary" value="ARUCO_MIP_36h12"/>
     <param name="marker_size" value="0.045"/>
