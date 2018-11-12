@@ -34,9 +34,15 @@ public:
     AruCoProcessing()
         : it_(nh_), nh_("AruCoMakerNode"){
         //load parameters
+<<<<<<< HEAD:src/test.cpp
         if(!nh_.getParam("marker_dictionary",dictionary_name_))
             dictionary_name_ = "TAG16h5";
         if(!nh_.getParam("marker_size",marker_size_meters_))
+=======
+        if(!nh_.getParam("/aruco_node/marker_dictonary",dictionary_name_))
+            dictionary_name_ = "ARUCO_MIP_36h12";
+        if(!nh_.getParam("/aruco_node/marker_size",marker_size_meters_))
+>>>>>>> 4f2107ab3e9684282e4f43f74e7a9af971a418c5:src/node.cpp
             marker_size_meters_ = 0.053;
 
         //set local parameters
@@ -45,9 +51,13 @@ public:
         cam_sub_ = it_.subscribeCamera("/image",1,
         &AruCoProcessing::imageCb, this);
         markers_pub_ = nh_.advertise<lab_ros_aruco::DetectedMarkers>("markers",1);
+<<<<<<< HEAD:src/test.cpp
         poses_pub_ = nh_.advertise<geometry_msgs::PoseArray>("marker_poses",1);
         ROS_INFO("ROS ARUCO: DICT: %s, size:%f", dictionary_name_.c_str(), marker_size_meters_);
 
+=======
+        ROS_INFO("Starting Aruco Detection library with marker type: %s", dictionary_name_.c_str());
+>>>>>>> 4f2107ab3e9684282e4f43f74e7a9af971a418c5:src/node.cpp
     }
 
     aruco::CameraParameters _convertCameraInfo(const sensor_msgs::CameraInfoConstPtr& cam_info){
@@ -126,6 +136,11 @@ public:
     }
 
     void imageCb(const sensor_msgs::ImageConstPtr& msg, const sensor_msgs::CameraInfoConstPtr& cam_info){
+<<<<<<< HEAD:src/test.cpp
+=======
+        //std::cout << "image callback";
+        ROS_DEBUG("Hello1");
+>>>>>>> 4f2107ab3e9684282e4f43f74e7a9af971a418c5:src/node.cpp
         cv_bridge::CvImagePtr cv_ptr;
         try
         {
@@ -136,10 +151,15 @@ public:
           ROS_ERROR("cv_bridge exception: %s", e.what());
           return;
         }
+        ROS_DEBUG("Hello2");        
         auto image_raw = cv_ptr->image;
         auto cam_parameter = _convertCameraInfo(cam_info);
         auto markers = detector_.detect(image_raw);
+<<<<<<< HEAD:src/test.cpp
         ROS_DEBUG("Detected %lu markers", markers.size());
+=======
+        ROS_DEBUG("Found %d tags",markers.size());
+>>>>>>> 4f2107ab3e9684282e4f43f74e7a9af971a418c5:src/node.cpp
         if(markers.size() > 0){
             lab_ros_aruco::DetectedMarkers detected_markers_msgs;
             geometry_msgs::PoseArray poseArray;
@@ -174,10 +194,24 @@ public:
 int main(int argc, char** argv ) {
 
     ros::init(argc, argv,"aruco_process_node");
+<<<<<<< HEAD:src/test.cpp
     AruCoProcessing pc;
     ros::spin();
     return 0;
 
+=======
+    try{
+        AruCoProcessing pc;
+        ROS_DEBUG("Spinning");
+        ros::spin();
+    }
+    catch (const std::exception& e)
+    {
+        ROS_ERROR("exception: %s", e.what());
+        return 0;
+    }
+   
+>>>>>>> 4f2107ab3e9684282e4f43f74e7a9af971a418c5:src/node.cpp
     //cout << "Hello World"; // prints Hello World
    //return 0;
 }
