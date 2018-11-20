@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 2.8.3)
 project(lab_ros_aruco)
 
 #include the CMake file of AruCo
-set("ARUCO_DIR" "aruco-2.0.19/")
-add_subdirectory(${ARUCO_DIR})
+set("ARUCO_DIR" "aruco-3.0.12")
+add_subdirectory(${ARUCO_DIR}) 
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
@@ -130,7 +130,7 @@ catkin_package(
 include_directories(
  include
   ${catkin_INCLUDE_DIRS}
-  ${ARUCO_DIR}src/
+  ${ARUCO_DIR}/src/
 )
 
 ## Declare a C++ library
