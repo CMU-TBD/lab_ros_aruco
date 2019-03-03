@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(lab_ros_aruco)
 
 #include the CMake file of AruCo
-set("ARUCO_DIR" "aruco-3.0.12")
-add_subdirectory(${ARUCO_DIR}) 
+set("ARUCO_DIR" "aruco-3.0.12") 
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
@@ -128,7 +127,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
- include
+  include
   ${catkin_INCLUDE_DIRS}
   ${ARUCO_DIR}/src/
 )
@@ -216,3 +215,5 @@ target_link_libraries(${PROJECT_NAME}_node
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_subdirectory(${ARUCO_DIR})
